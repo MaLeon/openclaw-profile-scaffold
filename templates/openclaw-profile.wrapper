@@ -1,0 +1,16 @@
+#!/bin/sh
+# Wrapper: run the OpenClaw CLI against the `{{PROFILE}}` profile.
+#
+# Why: `openclaw --profile {{PROFILE}} gateway status|restart|stop` resolves the
+# DEFAULT systemd unit (openclaw-gateway.service) instead of
+# openclaw-gateway-{{PROFILE}}.service. OPENCLAW_PROFILE / OPENCLAW_STATE_DIR alone
+# do not change that; only OPENCLAW_SYSTEMD_UNIT does. Without this wrapper,
+# restart/stop can hit the MAIN gateway.
+#
+# Usage: openclaw-{{PROFILE}} <openclaw args...>
+export OPENCLAW_PROFILE={{PROFILE}}
+export OPENCLAW_STATE_DIR=/root/.openclaw-{{PROFILE}}
+export OPENCLAW_CONFIG_PATH=/root/.openclaw-{{PROFILE}}/openclaw.json
+export OPENCLAW_GATEWAY_PORT={{PORT}}
+export OPENCLAW_SYSTEMD_UNIT=openclaw-gateway-{{PROFILE}}.service
+exec /usr/bin/openclaw "$@"

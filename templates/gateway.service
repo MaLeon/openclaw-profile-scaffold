@@ -1,0 +1,30 @@
+[Unit]
+Description=OpenClaw Gateway (profile: {{PROFILE}})
+After=network-online.target
+Wants=network-online.target
+StartLimitBurst=5
+StartLimitIntervalSec=60
+
+[Service]
+ExecStart=/usr/bin/node /usr/lib/node_modules/openclaw/dist/index.js gateway --port {{PORT}}
+Restart=always
+RestartSec=5
+RestartPreventExitStatus=78
+TimeoutStopSec=30
+TimeoutStartSec=30
+SuccessExitStatus=0 143
+OOMPolicy=continue
+KillMode=control-group
+Environment=HOME=/root
+Environment=TMPDIR=/tmp
+Environment=OPENCLAW_STATE_DIR=/root/.openclaw-{{PROFILE}}
+Environment=OPENCLAW_CONFIG_PATH=/root/.openclaw-{{PROFILE}}/openclaw.json
+Environment=PATH=/usr/bin:/bin:/usr/local/bin:/root/.local/bin:/root/.npm-global/bin:/root/bin:/root/.nix-profile/bin
+Environment=OPENCLAW_PROFILE={{PROFILE}}
+Environment=OPENCLAW_GATEWAY_PORT={{PORT}}
+Environment=OPENCLAW_SYSTEMD_UNIT=openclaw-gateway-{{PROFILE}}.service
+Environment=OPENCLAW_SERVICE_MARKER=openclaw
+Environment=OPENCLAW_SERVICE_KIND=gateway
+
+[Install]
+WantedBy=default.target

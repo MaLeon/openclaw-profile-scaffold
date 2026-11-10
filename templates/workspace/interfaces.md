@@ -1,0 +1,3 @@
+- channel: {{CHANNEL}}
+- agent: {{AGENT}}
+- dmScope: per-peer
