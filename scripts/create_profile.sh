@@ -151,7 +151,7 @@ sh -n "/usr/local/bin/openclaw-$PROFILE" || die "wrapper syntax error"
 say "7. start + verify"
 systemctl --user enable --now "$UNIT"
 sleep 5
-openclaw-"$PROFILE" gateway status || true
+openclaw-"$PROFILE" gateway status || die "gateway status failed; inspect the unit logs before continuing"
 
 cat <<EOF
 
